@@ -46,9 +46,10 @@ object Source extends App {
 
   /*7*/
   /*Although backtracking algorithm offers the best solution for the problem at hand it is quite restrictive regarding
-   * the size of the data set, thus making it impossible to use with quite small data sets(e.g. 100 entries). On the
-   * other hand the neighborhood search algorithm does not have this time constraint and also it doesn't
-   * overflow the call stack but it also doesn't find all the time the best solution.*/
+   * the size of the data set (i.e. the algorithm takes O(2^n) time to complete), thus making it impossible to use with
+   * quite small data sets(e.g. 100 entries). On the other hand the neighborhood search algorithm does not have this
+   * time constraint and also it doesn't overflow the call stack (i.e. for storing its neighbours it uses the heap stack)
+   * but it also doesn't find all the time the best solution.*/
 
   def timer[A](thunk: => A, sep: String = "| ", alg: String) = {
     val start  = System.currentTimeMillis()

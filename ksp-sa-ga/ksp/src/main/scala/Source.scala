@@ -83,7 +83,7 @@ case class DS(G: Int, N: Int, g: List[Int], v: List[Int]) {
     }
 
   private def neighbourhoodList(init: List[Int]) =
-    init.map(i => nextStep(init.sum - init.filter(_ == i).head, init.filterNot(_ == i)))
+    init.map(i => nextStep(init.sum - init.filter(_ == i).head, init.filterNot(_ == i)).maxBy(l => l.map(v(_)).sum))
 
   @tailrec
   private def randomSolution(r: Int = 0, except: List[Int] = List.empty): List[Int] =
@@ -95,14 +95,11 @@ case class DS(G: Int, N: Int, g: List[Int], v: List[Int]) {
       else DS(G - g(i), N, g, v).randomSolution(r + v(i), i :: except)
     }
 
-  private def nextStep(r: Int = 0, except: List[Int] = List.empty): List[Int] =
-    if (G - except.map(g(_)).sum == 0) except
-    else {
-      val i = if (except.length == N - 1) (0 until N).toList.diff(except).head else Random.nextInt(N - 1)
-      if (except.contains(i)) nextStep(r, except)
-      else if (G - except.map(g(_)).sum - g(i) < 0) except
-      else DS(G - g(i), N, g, v).nextStep(r + v(i), i :: except)
-    }
+  private def nextStep(r: Int = 0, except: List[Int] = List.empty) =
+    for {
+      i <- (0 until N).toList.diff(except)
+      if G - except.map(g(_)).sum - g(i) >= 0
+    } yield i :: except
 
 }
 

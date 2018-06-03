@@ -30,7 +30,7 @@ object Algorithms {
   implicit class NS(ds: DS) {
 
     @tailrec
-    final def neighbourhood(res: List[Int] = randomSolution(), iterations: Int = 5): Int =
+    final def neighbourhood(res: List[Int] = randomSolution(), iterations: Int = 50): Int =
       if (iterations == 0) res.map(ds.v(_)).sum
       else {
         val neighbours = neighbourhoodList(res).maxBy(l => l.map(ds.v(_)).sum)
@@ -47,7 +47,7 @@ object Algorithms {
     private[NS] final def randomSolution(r: Int = 0, except: List[Int] = List.empty): List[Int] =
       if (ds.G == 0) except
       else {
-        val i = if (except.length == ds.N - 1) (0 until ds.N).toList.diff(except).head else Random.nextInt(ds.N - 1)
+        val i = ds.g.zipWithIndex.sortWith { case ((e1, _), (e2, _)) => e1 < e2 }.map { case (_, j) => j }.diff(except).head
         if (except.contains(i)) randomSolution(r, except)
         else if (ds.G - ds.g(i) < 0) except
         else DS(ds.G - ds.g(i), ds.N, ds.g, ds.v).randomSolution(r + ds.v(i), i :: except)
@@ -64,14 +64,14 @@ object Algorithms {
 
     @tailrec
     final def annealing(
-                         initialTemperature: Double,
-                         lengthTemperature:  Double,
-                         coolingRatio:       Double,
-                         init:               List[Byte] = initialSolution(ds.N),
-                         result:             List[Byte] = initialSolution(ds.N),
-                         sampleSize:         Int = 50,
-                         sample:             Int = 0
-                       ): Int = {
+      initialTemperature: Double,
+      lengthTemperature:  Double,
+      coolingRatio:       Double,
+      init:               List[Byte] = initialSolution(ds.N),
+      result:             List[Byte] = initialSolution(ds.N),
+      sampleSize:         Int = 50,
+      sample:             Int = 0
+    ): Int = {
       if (initialTemperature <= lengthTemperature) calculate(result, ds.v)
       else if (sample == sampleSize)
         annealing(initialTemperature * coolingRatio, lengthTemperature, coolingRatio, init, result)
@@ -142,12 +142,12 @@ object Algorithms {
     import scala.collection.JavaConverters._
 
     def genetic(
-                 populationSize: Int,
-                 iterations:     Int,
-                 crossoverRate:  Double,
-                 mutationRate:   Double,
-                 cloningRate:    Double
-               ): Int = {
+      populationSize: Int,
+      iterations:     Int,
+      crossoverRate:  Double,
+      mutationRate:   Double,
+      cloningRate:    Double
+    ): Int = {
       new KnapsackProblem(
         ds.N,
         ds.G,

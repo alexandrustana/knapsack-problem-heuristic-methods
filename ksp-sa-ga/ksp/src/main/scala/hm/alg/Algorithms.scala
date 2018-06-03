@@ -69,14 +69,14 @@ object Algorithms {
       initialTemperature: Double,
       lengthTemperature:  Double,
       coolingRatio:       Double,
-      init:               List[Byte] = initialSolution(ds.N),
-      result:             List[Byte] = initialSolution(ds.N),
+      init:               List[Byte] = List.fill(ds.N)(0),
+      result:             List[Byte] = List.fill(ds.N)(0),
       sampleSize:         Int = 50,
       sample:             Int = 0
     ): Int = {
       if (initialTemperature <= lengthTemperature) calculate(result, ds.v)
       else if (sample == sampleSize)
-        annealing(initialTemperature * coolingRatio, lengthTemperature, coolingRatio, result = result, init = init)
+        annealing(initialTemperature * coolingRatio, lengthTemperature, coolingRatio, init, result)
       else {
         val i         = Random.nextInt(ds.N)
         val temp      = init.updated(i, { if (init(i) == 0) 1 else 0 }.toByte)
@@ -106,8 +106,6 @@ object Algorithms {
 
     private def calculate(s: List[Byte], l: List[Int]): Int =
       s.zipWithIndex.map { case (e, i) => if (e == 1) l(i) else 0 }.sum
-
-    private def initialSolution(N: Int): List[Byte] = List.fill(N)(0)
   }
 
   implicit class GA(ds: DS) {

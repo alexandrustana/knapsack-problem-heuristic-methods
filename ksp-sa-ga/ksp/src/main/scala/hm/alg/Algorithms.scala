@@ -74,15 +74,12 @@ object Algorithms {
       sampleSize:         Int = 50,
       sample:             Int = 0
     ): Int = {
-      if (initialTemperature <= lengthTemperature) {
-        val g = calculate(result, ds.g)
-        calculate(result, ds.v)
-      }
+      if (initialTemperature <= lengthTemperature) calculate(result, ds.v)
       else if (sample == sampleSize)
         annealing(initialTemperature * coolingRatio, lengthTemperature, coolingRatio, result = result, init = init)
       else {
         val i         = Random.nextInt(ds.N)
-        val temp      = init.take(i) ++ ({ if (init(i) == 0) 1 else 0 }.toByte :: init.drop(i + 1))
+        val temp      = init.updated(i, { if (init(i) == 0) 1 else 0 }.toByte)
         val variation = calculate(temp, ds.v) - calculate(init, ds.v)
         if (variation > 0 && (calculate(temp, ds.g) < ds.G)) {
           annealing(

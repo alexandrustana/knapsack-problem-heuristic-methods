@@ -60,7 +60,13 @@ object Source extends App {
     )
   }
 
-  println(DS8.genetic(1000, 50, 0.8, 0.15, 0.5))
+  def ex9 = {
+    List((1000, 50, 0.8, 0.15, 0.5), (50, 1000, 0.6, 0.3, 0.1), (500, 500, 0.7, 0.2, 0.3)).foreach(
+      i => DSList.foreach(ds => println(s"$ds: ${timer(ds.genetic(i._1, i._2, i._3, i._4, i._5), alg = s"GA$i")}"))
+    )
+  }
+
+  ex9
 
   def timer[A](thunk: => A, sep: String = "| ", alg: String) = {
     val start  = System.currentTimeMillis()
@@ -90,4 +96,3 @@ object DS {
     )
   }
 }
-

@@ -18,7 +18,6 @@ object Source extends App {
   val DSList = List(DS8, DS10, DS50, DS100)
 
   def ex4 = {
-    /*4*/
     DSList.take(2).foreach(ds => println(s"$ds: ${timer(ds.backtrack, alg = "B")}"))
     /*Using the backtracking algorithm on small sets offers solutions in a decent amount of time
    * the problem is if the data sets become larger(e.g. 50, 100). The backtracking algorithm evaluates some
@@ -26,13 +25,11 @@ object Source extends App {
   }
 
   def ex5 = {
-    /*5*/
     DSList.foreach(ds => println(s"$ds: ${ds.neighbourhood()} NS"))
     DSList.take(2).foreach(ds => println(s"$ds: ${ds.backtrack} B vs ${ds.neighbourhood()} NS"))
   }
 
   def ex6 = {
-    /*6*/
     DSList.take(2).foreach(ds => println(s"$ds: ${timer(ds.neighbourhood(),         alg = "NS")}"))
     DSList.reverse.take(2).foreach(ds => println(s"$ds: ${timer(ds.neighbourhood(), alg = "NS")}"))
 
@@ -61,14 +58,12 @@ object Source extends App {
   }
 
   def ex9 = {
-    /*9*/
     List((1000, 50, 0.8, 0.15, 0.5), (50, 1000, 0.6, 0.3, 0.1), (500, 500, 0.7, 0.2, 0.3)).foreach(
       i => DSList.foreach(ds => println(s"$ds: ${timer(ds.genetic(i._1, i._2, i._3, i._4, i._5), alg = s"GA$i")}"))
     )
   }
 
   def ex10 = {
-    /*10*/
     List(
       ((1500,   500,   0.9),   (1000, 50,   0.8, 0.15, 0.5)),
       ((15000,  1500,  0.99),  (50,   1000, 0.6, 0.3,  0.1)),
@@ -83,7 +78,39 @@ object Source extends App {
           )
       )
     )
+
+    DSList
+      .take(3)
+      .foreach(ds => println(s"$ds: ${timer(ds.backtrack, alg = "B")} vs ${timer(ds.neighbourhood(), alg = "NS")}"))
   }
+
+  /*11*/
+  /*The genetic algorithm shows a better precision when computing the results rather than the simulated annealing
+   * algorithm. This better precision is due to the fact that the genetic algorithm generates a population of solutions
+   * and the simulated annealing algorithm has only one solution. On large data sets the genetic algorithm performs
+   * better than the simulated annealing algorithm*/
+
+  def ex12 = {
+    List(
+      ((1500,   500,   0.9),   (1000, 50,   0.8, 0.15, 0.5)),
+      ((15000,  1500,  0.99),  (50,   1000, 0.6, 0.3,  0.1)),
+      ((150000, 15000, 0.999), (500,  500,  0.7, 0.2,  0.3))
+    ).foreach(
+      i =>
+        DSList.slice(0, 3)
+          .foreach(
+            ds =>
+              println(
+                s"$ds: ${timer(ds.annealing(i._1._1, i._1._2, i._1._3), alg = s"SA${i._1}")} vs " +
+//                  s"${timer(ds.genetic(i._2._1,      i._2._2, i._2._3, i._2._4, i._2._5), alg = s"GA${i._2}")} vs " +
+                  s"${timer(ds.backtrack, alg = "NS")}"
+            )
+        )
+    )
+
+    /**/
+  }
+  ex12
 
   def timer[A](thunk: => A, sep: String = "| ", alg: String) = {
     val start  = System.currentTimeMillis()
@@ -97,7 +124,7 @@ object Source extends App {
 /*1*/
 case class DS(G: Int, N: Int, g: List[Int], v: List[Int]) {
 
-  override def toString: String = s"DS-$N"
+  override def toString: String = s"DS-$N($G)"
 }
 
 object DS {

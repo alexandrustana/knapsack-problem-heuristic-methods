@@ -47,7 +47,9 @@ object Algorithms {
     private[NS] final def randomSolution(r: Int = 0, except: List[Int] = List.empty): List[Int] =
       if (ds.G == 0) except
       else {
-        val i = ds.g.zipWithIndex.sortWith { case ((e1, _), (e2, _)) => e1 < e2 }.map { case (_, j) => j }.diff(except).head
+        val i = ds.g.zipWithIndex.sortWith { case ((e1, _), (e2, _)) => e1 < e2 }.map { case (_, j) => j }
+          .diff(except)
+          .head
         if (except.contains(i)) randomSolution(r, except)
         else if (ds.G - ds.g(i) < 0) except
         else DS(ds.G - ds.g(i), ds.N, ds.g, ds.v).randomSolution(r + ds.v(i), i :: except)
@@ -72,62 +74,37 @@ object Algorithms {
       sampleSize:         Int = 50,
       sample:             Int = 0
     ): Int = {
-      if (initialTemperature <= lengthTemperature) calculate(result, ds.v)
+      if (initialTemperature <= lengthTemperature) {
+        val g = calculate(result, ds.g)
+        calculate(result, ds.v)
+      }
       else if (sample == sampleSize)
-        annealing(initialTemperature * coolingRatio, lengthTemperature, coolingRatio, init, result)
+        annealing(initialTemperature * coolingRatio, lengthTemperature, coolingRatio, result = result, init = init)
       else {
         val i         = Random.nextInt(ds.N)
         val temp      = init.take(i) ++ ({ if (init(i) == 0) 1 else 0 }.toByte :: init.drop(i + 1))
         val variation = calculate(temp, ds.v) - calculate(init, ds.v)
-        if (variation > 0 && calculate(temp, ds.g) < ds.G) {
-          if (calculate(temp, ds.v) > calculate(result, ds.v)) {
-            annealing(
-              initialTemperature,
-              lengthTemperature,
-              coolingRatio,
-              result = temp,
-              init   = temp,
-              sample = sample + 1
-            )
-          }
-          else {
-            annealing(
-              initialTemperature,
-              lengthTemperature,
-              coolingRatio,
-              result = result,
-              init   = temp,
-              sample = sample + 1
-            )
-          }
+        if (variation > 0 && (calculate(temp, ds.g) < ds.G)) {
+          annealing(
+            initialTemperature,
+            lengthTemperature,
+            coolingRatio,
+            result = if (calculate(temp, ds.v) > calculate(result, ds.v)) temp else result,
+            init   = temp,
+            sample = sample + 1
+          )
         }
         else {
-          if (Random.nextDouble() < nextState(initialTemperature, variation)) {
-            annealing(
-              initialTemperature,
-              lengthTemperature,
-              coolingRatio,
-              result = temp,
-              init   = temp,
-              sample = sample + 1
-            )
-          }
-          else {
-            annealing(
-              initialTemperature,
-              lengthTemperature,
-              coolingRatio,
-              result = result,
-              init   = init,
-              sample = sample + 1
-            )
-          }
+          annealing(
+            initialTemperature,
+            lengthTemperature,
+            coolingRatio,
+            result = result,
+            init   = if (Random.nextDouble() < Math.exp((-variation) / initialTemperature)) temp else init,
+            sample = sample + 1
+          )
         }
       }
-    }
-
-    private def nextState(t: Double, v: Double): Double = {
-      Math.exp((v - v) / t)
     }
 
     private def calculate(s: List[Byte], l: List[Int]): Int =

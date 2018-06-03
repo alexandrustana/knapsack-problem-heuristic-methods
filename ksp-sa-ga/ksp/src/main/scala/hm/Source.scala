@@ -61,12 +61,29 @@ object Source extends App {
   }
 
   def ex9 = {
+    /*9*/
     List((1000, 50, 0.8, 0.15, 0.5), (50, 1000, 0.6, 0.3, 0.1), (500, 500, 0.7, 0.2, 0.3)).foreach(
       i => DSList.foreach(ds => println(s"$ds: ${timer(ds.genetic(i._1, i._2, i._3, i._4, i._5), alg = s"GA$i")}"))
     )
   }
 
-  ex9
+  def ex10 = {
+    /*10*/
+    List(
+      ((1500,   500,   0.9),   (1000, 50,   0.8, 0.15, 0.5)),
+      ((15000,  1500,  0.99),  (50,   1000, 0.6, 0.3,  0.1)),
+      ((150000, 15000, 0.999), (500,  500,  0.7, 0.2,  0.3))
+    ).foreach(
+      i =>
+        DSList.foreach(
+          ds =>
+            println(
+              s"$ds: ${timer(ds.annealing(i._1._1, i._1._2, i._1._3), alg = s"SA${i._1}")} vs " +
+                s"${timer(ds.genetic(i._2._1,      i._2._2, i._2._3, i._2._4, i._2._5), alg = s"GA${i._2}")}"
+          )
+      )
+    )
+  }
 
   def timer[A](thunk: => A, sep: String = "| ", alg: String) = {
     val start  = System.currentTimeMillis()

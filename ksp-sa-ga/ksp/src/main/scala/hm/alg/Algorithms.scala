@@ -1,6 +1,6 @@
 package hm.alg
 
-import hm.{DS, alg}
+import hm.DS
 
 import scala.annotation.tailrec
 import scala.util.Random
@@ -107,7 +107,7 @@ object Algorithms {
               initialTemperature,
               lengthTemperature,
               coolingRatio,
-              result = result,
+              result = temp,
               init   = temp,
               sample = sample + 1
             )

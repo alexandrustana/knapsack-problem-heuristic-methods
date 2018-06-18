@@ -45,7 +45,7 @@ object Algorithms {
       )
 
     @tailrec
-    private[NS] final def randomSolution(r: Int = 0, except: List[Int] = List.empty): List[Int] =
+    private[Algorithms] final def randomSolution(r: Int = 0, except: List[Int] = List.empty): List[Int] =
       if (ds.G == 0) except
       else {
         val i = ds.g.zipWithIndex.sortWith { case ((e1, _), (e2, _)) => e1 < e2 }.map { case (_, j) => j }
@@ -64,16 +64,18 @@ object Algorithms {
   }
 
   implicit class SA(ds: DS) {
+    private val random = ds.randomSolution()
+    private val initial = List.fill(ds.N)(0).zipWithIndex.map{ case(_, i) => {if(random.contains(i)) 1 else 0}.toByte}
 
     @tailrec
     final def annealing(
-                         temperature: Double,
-                         lengthTemperature:  Double,
-                         coolingRatio:       Double,
-                         current:            List[Byte] = List.fill(ds.N)(0),
-                         result:             List[Byte] = List.fill(ds.N)(0),
-                         sampleSize:         Int = 50,
-                         sample:             Int = 0
+      temperature:       Double,
+      lengthTemperature: Double,
+      coolingRatio:      Double,
+      current:           List[Byte] = initial,
+      result:            List[Byte] = initial,
+      sampleSize:        Int = 50,
+      sample:            Int = 0
     ): Int = {
       if (temperature <= lengthTemperature) calculate(result, ds.v)
       else if (sample == sampleSize)
@@ -84,7 +86,7 @@ object Algorithms {
           if (current(i) == 0) 1 else 0
         }.toByte)
         val variation = calculate(temp, ds.v) - calculate(current, ds.v)
-        if (variation > 0 && (calculate(temp, ds.g) < ds.G))
+        if (variation > 0 && calculate(temp, ds.g) < ds.G)
           annealing(
             temperature,
             lengthTemperature,
@@ -99,9 +101,9 @@ object Algorithms {
             temperature,
             lengthTemperature,
             coolingRatio,
-            result = result,
-            current = if (x < Math.exp(variation / temperature)) temp else current,
-            sample = sample + 1
+            result  = result,
+            current = if (x < Math.exp(-variation / temperature)) temp else current,
+            sample  = sample + 1
           )
         }
       }

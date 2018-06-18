@@ -10,6 +10,7 @@ import scala.util.Random
   * @since 03/06/2018
   */
 object Algorithms {
+
   import Math._
 
   implicit class B(ds: DS) {
@@ -66,38 +67,40 @@ object Algorithms {
 
     @tailrec
     final def annealing(
-      initialTemperature: Double,
-      lengthTemperature:  Double,
-      coolingRatio:       Double,
-      init:               List[Byte] = List.fill(ds.N)(0),
-      result:             List[Byte] = List.fill(ds.N)(0),
-      sampleSize:         Int = 50,
-      sample:             Int = 0
+                         temperature: Double,
+                         lengthTemperature:  Double,
+                         coolingRatio:       Double,
+                         current:            List[Byte] = List.fill(ds.N)(0),
+                         result:             List[Byte] = List.fill(ds.N)(0),
+                         sampleSize:         Int = 50,
+                         sample:             Int = 0
     ): Int = {
-      if (initialTemperature <= lengthTemperature) calculate(result, ds.v)
+      if (temperature <= lengthTemperature) calculate(result, ds.v)
       else if (sample == sampleSize)
-        annealing(initialTemperature * coolingRatio, lengthTemperature, coolingRatio, init, result)
+        annealing(temperature * coolingRatio, lengthTemperature, coolingRatio, current, result)
       else {
-        val i         = Random.nextInt(ds.N)
-        val temp      = init.updated(i, { if (init(i) == 0) 1 else 0 }.toByte)
-        val variation = calculate(temp, ds.v) - calculate(init, ds.v)
-        if (variation > 0 && (calculate(temp, ds.g) < ds.G)) {
+        val i = Random.nextInt(ds.N)
+        val temp = current.updated(i, {
+          if (current(i) == 0) 1 else 0
+        }.toByte)
+        val variation = calculate(temp, ds.v) - calculate(current, ds.v)
+        if (variation > 0 && (calculate(temp, ds.g) < ds.G))
           annealing(
-            initialTemperature,
+            temperature,
             lengthTemperature,
             coolingRatio,
-            result = if (calculate(temp, ds.v) > calculate(result, ds.v)) temp else result,
-            init   = temp,
-            sample = sample + 1
+            result  = if (calculate(temp, ds.v) > calculate(result, ds.v)) temp else result,
+            current = temp,
+            sample  = sample + 1
           )
-        }
         else {
+          val x = Random.nextDouble()
           annealing(
-            initialTemperature,
+            temperature,
             lengthTemperature,
             coolingRatio,
             result = result,
-            init   = if (Random.nextDouble() < Math.exp((-variation) / initialTemperature)) temp else init,
+            current = if (x < Math.exp(variation / temperature)) temp else current,
             sample = sample + 1
           )
         }
@@ -109,6 +112,7 @@ object Algorithms {
   }
 
   implicit class GA(ds: DS) {
+
     import hm.alg.internal.KnapsackProblem
 
     import scala.collection.JavaConverters._

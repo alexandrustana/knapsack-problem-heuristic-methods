@@ -1,6 +1,5 @@
 package hm
 
-import scala.annotation.tailrec
 import scala.util.Random
 
 /**
@@ -96,21 +95,22 @@ object Source extends App {
       ((15000,  1500,  0.99),  (50,   1000, 0.6, 0.3,  0.1)),
       ((150000, 15000, 0.999), (500,  500,  0.7, 0.2,  0.3))
     ).foreach(
-        i =>
-          DSList
-            .foreach(
-              ds =>
-                println(
-                  s"$ds: ${timer(ds.annealing(i._1._1, i._1._2, i._1._3), alg = s"SA${i._1}")} vs " +
-                    s"${timer(ds.genetic(i._2._1,      i._2._2, i._2._3, i._2._4, i._2._5), alg = s"GA${i._2}")} vs " +
-                    s"${timer(ds.backtrack,       alg = "B")} vs " +
-                    s"${timer(ds.neighbourhood(), alg = "NS")}"
-              )
-          )
-      )
-
-    /**/
+      i =>
+        DSList
+          .takeRight(2)
+          .foreach(
+            ds =>
+              println(
+                s"$ds: ${timer(ds.annealing(i._1._1, i._1._2, i._1._3), alg = s"SA${i._1}")} vs " +
+                  s"${timer(ds.genetic(i._2._1,      i._2._2, i._2._3, i._2._4, i._2._5), alg = s"GA${i._2}")} vs " +
+                  s"${timer(ds.neighbourhood(), alg = "NS")}"
+            )
+        )
+    )
   }
+
+  /*13*/
+  /*The */
   ex12
 
   def timer[A](thunk: => A, sep: String = "| ", alg: String) = {

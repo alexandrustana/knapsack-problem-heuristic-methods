@@ -5,33 +5,30 @@ package hm.alg.internal;
  * @since 02/06/2018
  */
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class KnapsackProblem {
 
-    private boolean      verbose                     = false;
-    private boolean      mutation                    = false;
     private int          crossover_count             = 0;
     private int          clone_count                 = 0;
-    private int          number_of_items             = 0;
-    private int          population_size             = 0;
-    private int          maximum_generations         = 30;
+    private int          number_of_items;
+    private int          population_size;
+    private int          maximum_generations;
     private int          generation_counter          = 1;
-    private double       knapsack_capacity           = 0;
+    private double       knapsack_capacity;
     private double       prob_crossover              = 0.5;
-    private double       prob_mutation               = 0.03;
+    private double       prob_mutation;
     private double       total_fitness_of_generation = 0;
-    private List<Double> value_of_items              = new ArrayList<Double>();
-    private List<Double> weight_of_items             = new ArrayList<Double>();
+    private List<Double> value_of_items;
+    private List<Double> weight_of_items;
     private List<Double> fitness                     = new ArrayList<>();
-    private List<Double> best_fitness_of_generation  = new ArrayList<Double>();
-    private List<Double> mean_fitness_of_generation  = new ArrayList<Double>();
-    private List<String> population                  = new ArrayList<String>();
-    private List<String> breed_population            = new ArrayList<String>();
-    private List<String> best_solution_of_generation = new ArrayList<String>();
+    private List<Double> best_fitness_of_generation  = new ArrayList<>();
+    private List<Double> mean_fitness_of_generation  = new ArrayList<>();
+    private List<String> population                  = new ArrayList<>();
+    private List<String> breed_population            = new ArrayList<>();
+    private List<String> best_solution_of_generation = new ArrayList<>();
 
 
     public KnapsackProblem(int number_of_items, double knapsack_capacity, List<Double> value_of_items, List<Double> weight_of_items, int population_size, int maximum_generations, double prob_crossover, double prob_mutation, double prob_cloning) {
@@ -87,7 +84,6 @@ public class KnapsackProblem {
 
             this.crossover_count = 0;
             this.clone_count = 0;
-            this.mutation = false;
 
             for (int j = 0; j < this.population_size / 2; j++) {
                 this.breedPopulation();
@@ -109,26 +105,6 @@ public class KnapsackProblem {
 
             this.best_fitness_of_generation.add(this.evalGene(this.population.get(this.getBestSolution())));
         }
-    }
-
-    private void showOptimalList() {
-
-        double best_fitness = 0;
-        int    best_gen     = 0;
-
-        for (int z = 0; z < this.maximum_generations - 1; z++) {
-            if (this.best_fitness_of_generation.get(z) > best_fitness) {
-                best_fitness = this.best_fitness_of_generation.get(z);
-                best_gen = z;
-            }
-        }
-        String optimal_list = this.best_solution_of_generation.get(best_gen);
-        for (int y = 0; y < this.number_of_items; y++) {
-            if (optimal_list.substring(y, y + 1).equals("1")) {
-                System.out.print((y) + " ");
-            }
-        }
-
     }
 
     public Double getResult() {
@@ -175,11 +151,10 @@ public class KnapsackProblem {
         double rand_mutation = Math.random();
         if (rand_mutation <= prob_mutation) {
 
-            mutation = true;
             String mut_gene;
             String new_mut_gene;
             Random generator  = new Random();
-            int    mut_point  = 0;
+            int    mut_point;
             double which_gene = Math.random() * 100;
 
             if (which_gene <= 50) {
@@ -253,7 +228,7 @@ public class KnapsackProblem {
 
     private int getBestSolution() {
         int    best_position = 0;
-        double this_fitness  = 0;
+        double this_fitness;
         double best_fitness  = 0;
         for (int i = 0; i < population_size; i++) {
             this_fitness = evalGene(population.get(i));
@@ -268,7 +243,7 @@ public class KnapsackProblem {
 
     private double getMeanFitness() {
         double total_fitness = 0;
-        double mean_fitness  = 0;
+        double mean_fitness;
         for (int i = 0; i < population_size; i++) {
             total_fitness = total_fitness + fitness.get(i);
         }
@@ -301,8 +276,8 @@ public class KnapsackProblem {
         double total_weight  = 0;
         double total_value   = 0;
         double fitness_value = 0;
-        double difference    = 0;
-        char   c             = '0';
+        double difference;
+        char   c;
 
         for (int j = 0; j < number_of_items; j++) {
             c = gene.charAt(j);
@@ -342,80 +317,6 @@ public class KnapsackProblem {
             gene.append(c);
         }
         return gene.toString();
-    }
-
-
-    private void getInput() {
-
-        String input;
-
-        Console c = System.console();
-        if (c == null) {
-            System.err.println("No console.");
-            System.exit(1);
-        }
-
-        input = c.readLine("Enter the number of items: ");
-        if (isInteger(input)) {
-            number_of_items = Integer.parseInt(input);
-        } else {
-            System.out.println("Not a number. Please try again.");
-            System.exit(1);
-        }
-
-        for (int i = 0; i < number_of_items; i++) {
-            input = c.readLine("Enter the length of item " + (i + 1) + ": ");
-            if (isDouble(input)) {
-                weight_of_items.add(Double.parseDouble(input));
-            } else {
-                System.out.println("Not a number. Please try again.");
-                System.exit(1);
-            }
-
-            input = c.readLine("Enter the value of item " + (i + 1) + ": ");
-            if (isDouble(input)) {
-                value_of_items.add(Double.parseDouble(input));
-            } else {
-                System.out.println("Not a number. Please try again.");
-                System.exit(1);
-            }
-        }
-
-        input = c.readLine("Enter the knapsack capacity: ");
-        if (isInteger(input)) {
-            knapsack_capacity = Integer.parseInt(input);
-        } else {
-            System.out.println("Not a number. Please try again.");
-            System.exit(1);
-        }
-
-        input = c.readLine("Enter the population size: ");
-        if (isInteger(input)) {
-            population_size = Integer.parseInt(input);
-        } else {
-            System.out.println("Not a number. Please try again.");
-            System.exit(1);
-        }
-    }
-
-
-    public static boolean isInteger(String str) {
-        try {
-            Integer.parseInt(str);
-        } catch (NumberFormatException e) {
-            return false;
-        }
-        return true;
-    }
-
-
-    public static boolean isDouble(String str) {
-        try {
-            Double.parseDouble(str);
-        } catch (NumberFormatException e) {
-            return false;
-        }
-        return true;
     }
 
 }

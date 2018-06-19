@@ -101,7 +101,7 @@ object Source extends App {
           .foreach(
             ds =>
               println(
-                s"$ds: ${timer(ds.annealing(i._1._1, i._1._2, i._1._3), alg = s"SA${i._1}")} vs " +
+//                s"$ds: ${timer(ds.annealing(i._1._1, i._1._2, i._1._3), alg = s"SA${i._1}")} vs " +
                   s"${timer(ds.genetic(i._2._1,      i._2._2, i._2._3, i._2._4, i._2._5), alg = s"GA${i._2}")} vs " +
                   s"${timer(ds.neighbourhood(), alg = "NS")}"
             )

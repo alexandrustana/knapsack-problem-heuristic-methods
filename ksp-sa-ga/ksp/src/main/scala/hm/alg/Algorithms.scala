@@ -160,13 +160,13 @@ object Algorithms {
     ): Int = {
       val population = create(populationSize, ds.N)
 
-      val evaluated = evaluate(ds.G, population, ds.g, ds.v)
+      val evaluated = evaluate(ds.N, ds.G, population, ds.g, ds.v)
 
       bestSolutionsOfGeneration += population(bestSolution(evaluated._1))
 
       meanFitnessOfGeneration += meanFitness(evaluated._2, populationSize)
 
-      bestFitnessOfGeneration += evaluateGene(ds.G, population(bestSolution(evaluated._1)), ds.g, ds.v)
+      bestFitnessOfGeneration += evaluateGene(ds.N, ds.G, population(bestSolution(evaluated._1)), ds.g, ds.v)
 
       (0 until iterations).foreach(i => {
         if (meanFitnessOfGeneration.size > 4) {
@@ -177,18 +177,18 @@ object Algorithms {
         (0 until (populationSize / 2))
           .foreach(_ => breed(populationSize, evaluated, crossoverRate, mutationRate, cloningRate, ds.N, population))
 
-        evaluate(ds.G, population, ds.g, ds.v)
+        evaluate(ds.N, ds.G, population, ds.g, ds.v)
 
-        val newPopulation = (0 until populationSize).map(k => breedPopulation(k)).toList
+        val newPopulation = breedPopulation.clone().toList
         breedPopulation.clear()
 
-        val eval = evaluate(ds.G, newPopulation, ds.g, ds.v)
+        val eval = evaluate(ds.N, ds.G, newPopulation, ds.g, ds.v)
 
         bestSolutionsOfGeneration += newPopulation(bestSolution(eval._1))
 
         meanFitnessOfGeneration += meanFitness(eval._2, populationSize)
 
-        bestFitnessOfGeneration += evaluateGene(ds.G, newPopulation(bestSolution(eval._1)), ds.g, ds.v)
+        bestFitnessOfGeneration += evaluateGene(ds.N, ds.G, newPopulation(bestSolution(eval._1)), ds.g, ds.v)
       })
 
       result(iterations, ds.N, ds.v)
@@ -227,6 +227,7 @@ object Algorithms {
       if (x <= probCloning) {
         breedPopulation += bestSolutionsOfGeneration(bestSolutionsOfGeneration.size - 1)
       }
+      ()
     }
 
     private def crossover(gene1: Int, gene2: Int, probCrossover: Double, items: Int, population: List[List[Byte]]) = {
@@ -246,7 +247,7 @@ object Algorithms {
 
     private def mutate(probMutation: Double, items: Int) {
       val x = Math.random()
-      if (x <= probMutation) {
+      if (x <= probMutation && breedPopulation.size > 0) {
         val i = Random.nextInt(breedPopulation.size)
         val p = Random.nextInt(items)
         breedPopulation(i) = breedPopulation(i).updated(p, { if (breedPopulation(i)(p) == 0) 1 else 0 }.toByte)
@@ -279,24 +280,21 @@ object Algorithms {
       )
 
     private def evaluate(
+      items:      Int,
       capacity:   Int,
       population: List[List[Byte]],
       weights:    List[Int],
       values:     List[Int]
     ) = {
-      val fitness      = population.zipWithIndex.map { case (gene, i) => (i, evaluateGene(capacity, gene, weights, values)) }
+      val fitness = population.zipWithIndex.map {
+        case (gene, i) => (evaluateGene(items, capacity, gene, weights, values), i)
+      }
       val totalFitness = fitness.map(e => e._1).sum
       (fitness, totalFitness)
     }
 
-    private def evaluateGene(capacity: Int, gene: List[Byte], weights: List[Int], values: List[Int]) = {
-      gene.zipWithIndex.filter(e => e._1 == 1).foldLeft((0, 0)) {
-        case ((weight, value), (_, i)) =>
-          if (gene.size <= weights.size)
-            (weight + weights(i), value + values(i))
-          else
-            (weight, value)
-      } match {
+    private def evaluateGene(items: Int, capacity: Int, gene: List[Byte], weights: List[Int], values: List[Int]) = {
+      (0 until items).foldLeft((0, 0))((r, i) => if (gene(i) == 1) (r._1 + weights(i), r._2 + values(i)) else r) match {
         case (totalWeight, totalValue) => if (capacity - totalWeight >= 0) totalValue else 0
       }
     }

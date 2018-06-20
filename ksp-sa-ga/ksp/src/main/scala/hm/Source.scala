@@ -16,19 +16,19 @@ object Source extends App {
 
   val DSList = List(DS8, DS10, DS50, DS100)
 
-  def ex4 = {
+  private def ex4 {
     DSList.take(2).foreach(ds => println(s"$ds: ${timer(ds.backtrack, alg = "B")}"))
     /*Using the backtracking algorithm on small sets offers solutions in a decent amount of time
    * the problem is if the data sets become larger(e.g. 50, 100). The backtracking algorithm evaluates some
    * solutions multiples times this causing the call stack to increase and overflow if the data set is large enough.*/
   }
 
-  def ex5 = {
+  private def ex5 {
     DSList.foreach(ds => println(s"$ds: ${ds.neighbourhood()} NS"))
     DSList.take(2).foreach(ds => println(s"$ds: ${ds.backtrack} B vs ${ds.neighbourhood()} NS"))
   }
 
-  def ex6 = {
+  private def ex6 {
     DSList.take(2).foreach(ds => println(s"$ds: ${timer(ds.neighbourhood(),         alg = "NS")}"))
     DSList.reverse.take(2).foreach(ds => println(s"$ds: ${timer(ds.neighbourhood(), alg = "NS")}"))
 
@@ -50,19 +50,19 @@ object Source extends App {
    * time constraint and also it doesn't overflow the call stack (i.e. for storing its neighbours it uses the heap stack)
    * but it also doesn't find all the time the best solution.*/
 
-  def ex8 = {
+  private def ex8 {
     List((1500, 500, 0.9), (15000, 1500, 0.99), (150000, 15000, 0.999)).foreach(
       i => DSList.foreach(ds => println(s"$ds: ${timer(ds.annealing(i._1, i._2, i._3), alg = s"SA$i")}"))
     )
   }
 
-  def ex9 = {
+  private def ex9 {
     List((1000, 50, 0.8, 0.15, 0.5), (50, 1000, 0.6, 0.3, 0.1), (500, 500, 0.7, 0.2, 0.3)).foreach(
       i => DSList.foreach(ds => println(s"$ds: ${timer(ds.genetic(i._1, i._2, i._3, i._4, i._5), alg = s"GA$i")}"))
     )
   }
 
-  def ex10 = {
+  private def ex10 {
     List(
       ((1500,   500,   0.9),   (1000, 50,   0.8, 0.15, 0.5)),
       ((15000,  1500,  0.99),  (50,   1000, 0.6, 0.3,  0.1)),
@@ -89,7 +89,7 @@ object Source extends App {
    * and the simulated annealing algorithm has only one solution. On large data sets the genetic algorithm performs
    * better than the simulated annealing algorithm*/
 
-  def ex12 = {
+  private def ex12 {
     List(
       ((1500,   500,   0.9),   (1000, 50,   0.8, 0.15, 0.5)),
       ((15000,  1500,  0.99),  (50,   1000, 0.6, 0.3,  0.1)),
@@ -108,11 +108,81 @@ object Source extends App {
     )
   }
 
-  /*13*/
-  /*The */
-  ex12
+  private def ex13 {
+    List(
+      (1500,   500,   0.9),
+      (1500,   500,   0.4),
+      (15000,  1500,  0.99),
+      (15000,  1500,  0.3),
+      (150000, 15000, 0.5),
+      (150000, 15000, 0.9)
+    ).foreach(
+      i =>
+        DSList.foreach(
+          ds =>
+            println(
+              s"$ds: ${timer(ds.annealing(i._1, i._2, i._3), alg = s"SA$i")}"
+          )
+      )
+    )
+  }
+  /*The bigger the gap between the initial temperature and the temperature length is the more accurate the result is.
+   * The accuracy the result is mostly affected by the cooling factor. A high cooling factor means that the temperatures
+   * will drop down fast and solutions will be missed. On the other hand a low cooling factor will ensure a more granular
+   * approach and will offer much more solutions.*/
 
-  def timer[A](thunk: => A, sep: String = "| ", alg: String) = {
+  private def ex14 {
+    List(
+      (1000, 50,   0.8, 0.15, 0.5),
+      (1000, 50,   0.2, 0.15, 0.5),
+      (1000, 50,   0.8, 0.7,  0.5),
+      (1000, 50,   0.8, 0.15, 0.2),
+      (50,   1000, 0.8, 0.15, 0.5),
+      (50,   1000, 0.2, 0.15, 0.5),
+      (50,   1000, 0.8, 0.7,  0.5),
+      (50,   1000, 0.8, 0.15, 0.2),
+      (500,  500,  0.8, 0.15, 0.5),
+      (500,  500,  0.2, 0.15, 0.5),
+      (500,  500,  0.8, 0.7,  0.5),
+      (500,  500,  0.8, 0.15, 0.2)
+    ).foreach(
+      i =>
+        DSList.foreach(
+          ds =>
+            println(
+              s"$ds: ${timer(ds.genetic(i._1, i._2, i._3, i._4, i._5), alg = s"GA$i")}"
+          )
+      )
+    )
+  }
+
+  /**
+    * A high number of generations ensures that the result is more accurate, however if the number is to large the time
+    * needed to find a solution is much longer. Even tough a small number of generations yields a result much faster this
+    * comes with the price that some good solutions will never be reached. If the mutation rate is high than there is
+    * the risk that some good solutions are mutated and invalidated, if the mutation rate is to low than the algorithm
+    * can get stuck. If the crossover rate is to high than the problem with the mutation high rate remains, some valid
+    * genes which offer good solutions are combined and the result is not as good as the parent gene, but if the crossover
+    * rate is to low than again the algorithm can get stuck. Having a low cloning rate can cause the algorithm to evolve
+    * slowly because the new genes can have a lower score than the old genes, however having a high cloning rate will
+    * cause the new population to be very much like the old one and thus it may get stuck.
+    */
+
+  /*15*/
+  /*The advantage of using a Backtracking algorithm is that the algorithm ensures that the solution is always the best.
+   * Although this best solution comes with the cost that the call stack explodes if the Data Set is not small, thus making
+   * the algorithm feasible to use only for small data sets.
+   * The Neighbourhood Search algorithm on the other hand can be used with much bigger data sets, because it doesn't
+   * find the best solution exhaustively. The algorithm after a number of iterations quits and returns the best solution
+   * found so far. The problem with this algorithm is that it can get stuck in a local solution.
+   * The Simulated Annealing algorithm has the advantage that it doesn't get stuck in a local solution but because it only
+   * uses a single "population" as input the chances for it to offer the best solution are smaller than the chances for
+   * the Genetic Algorithm to offer the best solution.
+   * The Genetic Algorithm or the Simulated Annealing algorithm although they don't offer all the time the best solution
+   * they can still offer better solutions than the Neighbourhood Search algorithm(which can get stuck) or the Backtracking
+   * algorithm which can easily explode the call stack.*/
+
+  private def timer[A](thunk: => A, sep: String = "| ", alg: String) = {
     val start  = System.currentTimeMillis()
     val result = thunk
     val end    = System.currentTimeMillis()

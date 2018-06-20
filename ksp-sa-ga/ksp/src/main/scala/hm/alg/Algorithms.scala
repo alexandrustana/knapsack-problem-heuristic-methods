@@ -145,11 +145,6 @@ object Algorithms {
       bestFitnessOfGeneration += evaluateGene(ds.N, ds.G, population(bestSolution(evaluated._1)), ds.g, ds.v)
 
       (0 until iterations).foreach(_ => {
-        if (meanFitnessOfGeneration.size > 4) {
-          if (meanFitnessOfGeneration.takeRight(3).sum == (meanFitnessOfGeneration.takeRight(1).head * 3)) {
-            return result(iterations, ds.N, ds.v)
-          }
-        }
         (0 until (populationSize / 2))
           .foreach(
             _ => breed(populationSize, evaluated, crossoverRate, mutationRate, cloningRate, ds.N, population.toList)

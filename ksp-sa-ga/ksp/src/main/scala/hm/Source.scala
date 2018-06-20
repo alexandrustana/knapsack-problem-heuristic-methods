@@ -7,7 +7,10 @@ import scala.util.Random
   * @since 01/06/2018
   */
 object Source extends App {
-  import alg.Algorithms._
+  import hm.alg.backtracking._
+  import hm.alg.neighbourhood._
+  import hm.alg.annealing._
+  import hm.alg.genetic._
 
   val DS8   = DS.build(8)
   val DS10  = DS.build(10)
@@ -47,7 +50,7 @@ object Source extends App {
   /*Although backtracking algorithm offers the best solution for the problem at hand it is quite restrictive regarding
    * the size of the data set (i.e. the algorithm takes O(2^n) time to complete), thus making it impossible to use with
    * quite small data sets(e.g. 100 entries). On the other hand the neighborhood search algorithm does not have this
-   * time constraint and also it doesn't overflow the call stack (i.e. for storing its neighbours it uses the heap stack)
+   * size constraint and also it doesn't overflow the call stack (i.e. for storing its neighbours it uses the heap stack)
    * but it also doesn't find all the time the best solution.*/
 
   private def ex8 {

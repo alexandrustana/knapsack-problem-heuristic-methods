@@ -36,11 +36,11 @@ object Algorithms {
       if (iterations == 0) res.map(ds.v(_)).sum
       else {
         val neighbours = neighbourhoodList(res).maxBy(l => l.map(ds.v(_)).sum)
-        if (res.map(ds.v(_)).sum > neighbours.map(ds.v(_)).sum) neighbourhood(res, iterations - 1)
+        if (res.map(ds.v(_)).sum > neighbours.map(ds.v(_)).sum) res.map(ds.v(_)).sum
         else neighbourhood(neighbours,                                             iterations - 1)
       }
 
-    private[NS] def neighbourhoodList(init: List[Int]) =
+    private def neighbourhoodList(init: List[Int]) =
       init.map(
         i => nextStep(init.sum - init.filter(_ == i).head, init.filterNot(_ == i)).maxBy(l => l.map(ds.v(_)).sum)
       )
@@ -57,7 +57,7 @@ object Algorithms {
         else DS(ds.G - ds.g(i), ds.N, ds.g, ds.v).randomSolution(r + ds.v(i), i :: except)
       }
 
-    private[NS] def nextStep(r: Int = 0, except: List[Int] = List.empty) =
+    private def nextStep(r: Int = 0, except: List[Int] = List.empty) =
       for {
         i <- (0 until ds.N).toList.diff(except)
         if ds.G - except.map(ds.g(_)).sum - ds.g(i) >= 0

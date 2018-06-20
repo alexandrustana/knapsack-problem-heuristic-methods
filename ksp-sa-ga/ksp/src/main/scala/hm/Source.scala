@@ -167,7 +167,6 @@ object Source extends App {
     * slowly because the new genes can have a lower score than the old genes, however having a high cloning rate will
     * cause the new population to be very much like the old one and thus it may get stuck.
     */
-
   /*15*/
   /*The advantage of using a Backtracking algorithm is that the algorithm ensures that the solution is always the best.
    * Although this best solution comes with the cost that the call stack explodes if the Data Set is not small, thus making

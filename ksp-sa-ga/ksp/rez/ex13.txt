@@ -1,0 +1,31 @@
+For each i = 8, 10, 50 and 100, compare the three elements of S[] SA - i . The difference between them  must reside in the different sets of control parameters that you’ve chosen for each of the three runs  (initial temperature, temperature  length, cooling ratio). Draw a conclusion about the influence that  each control parameter has on the final result
+
+ /*The bigger the gap between the initial temperature and the temperature length is the more accurate the result is.
+   * The accuracy the result is mostly affected by the cooling factor. A high cooling factor means that the temperatures
+   * will drop down fast and solutions will be missed. On the other hand a low cooling factor will ensure a more granular
+   * approach and will offer much more solutions.*/
+
+   SA(1500,500,0.9) duration: 57 milliseconds | DS-8(97): 240
+   SA(1500,500,0.9) duration: 8 milliseconds | DS-10(66): 363
+   SA(1500,500,0.9) duration: 32 milliseconds | DS-50(70): 603
+   SA(1500,500,0.9) duration: 32 milliseconds | DS-100(7): 374
+   SA(1500,500,0.4) duration: 2 milliseconds | DS-8(97): 214
+   SA(1500,500,0.4) duration: 3 milliseconds | DS-10(66): 297
+   SA(1500,500,0.4) duration: 5 milliseconds | DS-50(70): 603
+   SA(1500,500,0.4) duration: 11 milliseconds | DS-100(7): 374
+   SA(15000,1500,0.99) duration: 51 milliseconds | DS-8(97): 244
+   SA(15000,1500,0.99) duration: 32 milliseconds | DS-10(66): 374
+   SA(15000,1500,0.99) duration: 172 milliseconds | DS-50(70): 603
+   SA(15000,1500,0.99) duration: 263 milliseconds | DS-100(7): 374
+   SA(15000,1500,0.3) duration: 0 milliseconds | DS-8(97): 214
+   SA(15000,1500,0.3) duration: 1 milliseconds | DS-10(66): 295
+   SA(15000,1500,0.3) duration: 3 milliseconds | DS-50(70): 603
+   SA(15000,1500,0.3) duration: 3 milliseconds | DS-100(7): 374
+   SA(150000,15000,0.5) duration: 1 milliseconds | DS-8(97): 244
+   SA(150000,15000,0.5) duration: 0 milliseconds | DS-10(66): 295
+   SA(150000,15000,0.5) duration: 2 milliseconds | DS-50(70): 603
+   SA(150000,15000,0.5) duration: 5 milliseconds | DS-100(7): 374
+   SA(150000,15000,0.9) duration: 3 milliseconds | DS-8(97): 244
+   SA(150000,15000,0.9) duration: 5 milliseconds | DS-10(66): 355
+   SA(150000,15000,0.9) duration: 18 milliseconds | DS-50(70): 603
+   SA(150000,15000,0.9) duration: 39 milliseconds | DS-100(7): 374

@@ -1,0 +1,17 @@
+Comp are S[] SA - i with S[] GA - i and both of them  with S NS - i and S B - i (for i = 8, 10, 50 and 100)
+
+SA(1500,500,0.9) duration: 50 milliseconds | GA(1000,50,0.8,0.15,0.5) duration: 91185 milliseconds | DS-8(49): 258 vs 284
+SA(1500,500,0.9) duration: 7 milliseconds | GA(1000,50,0.8,0.15,0.5) duration: 88003 milliseconds | DS-10(37): 317 vs 317
+SA(1500,500,0.9) duration: 13 milliseconds | GA(1000,50,0.8,0.15,0.5) duration: 1186 milliseconds | DS-50(92): 460 vs 1832
+SA(1500,500,0.9) duration: 20 milliseconds | GA(1000,50,0.8,0.15,0.5) duration: 2842 milliseconds | DS-100(55): 796 vs 2644
+SA(15000,1500,0.99) duration: 18 milliseconds | GA(50,1000,0.6,0.3,0.1) duration: 154 milliseconds | DS-8(49): 258 vs 284
+SA(15000,1500,0.99) duration: 24 milliseconds | GA(50,1000,0.6,0.3,0.1) duration: 160 milliseconds | DS-10(37): 317 vs 317
+SA(15000,1500,0.99) duration: 121 milliseconds | GA(50,1000,0.6,0.3,0.1) duration: 449 milliseconds | DS-50(92): 460 vs 1709
+SA(15000,1500,0.99) duration: 355 milliseconds | GA(50,1000,0.6,0.3,0.1) duration: 1522 milliseconds | DS-100(55): 796 vs 2808
+SA(150000,15000,0.999) duration: 139 milliseconds | GA(500,500,0.7,0.2,0.3) duration: 66722 milliseconds | DS-8(49): 258 vs 284
+SA(150000,15000,0.999) duration: 171 milliseconds | GA(500,500,0.7,0.2,0.3) duration: 66217 milliseconds | DS-10(37): 317 vs 317
+SA(150000,15000,0.999) duration: 1124 milliseconds | GA(500,500,0.7,0.2,0.3) duration: 3641 milliseconds | DS-50(92): 460 vs 1260
+SA(150000,15000,0.999) duration: 3421 milliseconds | GA(500,500,0.7,0.2,0.3) duration: 10173 milliseconds | DS-100(55): 796 vs 2799
+B duration: 3 milliseconds | NS duration: 29 milliseconds | DS-8(49): 284 vs 232
+B duration: 1 milliseconds | NS duration: 12 milliseconds | DS-10(37): 317 vs 305
+B duration: 381 milliseconds | NS duration: 26 milliseconds | DS-50(92): 671 vs 569

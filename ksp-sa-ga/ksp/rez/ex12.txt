@@ -1,0 +1,14 @@
+Also  co mpare  T[] SA - 50 with  T[] NS - 50 ,  T[] SA - 100 with  T[] NS - 100 ,  T[] GA - 50 with  T[] NS - 50 ,  T[] GA - 100 with  T[] NS - 100 , T[] SA - 50 with T[] GA - 50 and T[] SA - 100 with T[] GA - 100 . Correlate each of these times with the  optimality of the solution found in that time. Draw the ne cessary conclusion s
+
+SA(1500,500,0.9) duration: 53 milliseconds | GA(1000,50,0.8,0.15,0.5) duration: 92794 milliseconds | NS duration: 46 milliseconds | DS-8(54): 346 vs 346 vs 346
+SA(1500,500,0.9) duration: 3 milliseconds | GA(1000,50,0.8,0.15,0.5) duration: 88036 milliseconds | NS duration: 12 milliseconds | DS-10(19): 247 vs 272 vs 204
+SA(1500,500,0.9) duration: 10 milliseconds | GA(1000,50,0.8,0.15,0.5) duration: 1163 milliseconds | NS duration: 60 milliseconds | DS-50(69): 965 vs 1348 vs 1028
+SA(1500,500,0.9) duration: 16 milliseconds | GA(1000,50,0.8,0.15,0.5) duration: 2914 milliseconds | NS duration: 170 milliseconds | DS-100(61): 891 vs 2896 vs 1030
+SA(15000,1500,0.99) duration: 18 milliseconds | GA(50,1000,0.6,0.3,0.1) duration: 161 milliseconds | NS duration: 2 milliseconds | DS-8(54): 346 vs 346 vs 346
+SA(15000,1500,0.99) duration: 21 milliseconds | GA(50,1000,0.6,0.3,0.1) duration: 159 milliseconds | NS duration: 2 milliseconds | DS-10(19): 266 vs 272 vs 204
+SA(15000,1500,0.99) duration: 123 milliseconds | GA(50,1000,0.6,0.3,0.1) duration: 453 milliseconds | NS duration: 39 milliseconds | DS-50(69): 965 vs 1330 vs 1028
+SA(15000,1500,0.99) duration: 346 milliseconds | GA(50,1000,0.6,0.3,0.1) duration: 1483 milliseconds | NS duration: 164 milliseconds | DS-100(61): 891 vs 2575 vs 1030
+SA(150000,15000,0.999) duration: 145 milliseconds | GA(500,500,0.7,0.2,0.3) duration: 66526 milliseconds | NS duration: 1 milliseconds | DS-8(54): 346 vs 346 vs 346
+SA(150000,15000,0.999) duration: 156 milliseconds | GA(500,500,0.7,0.2,0.3) duration: 68659 milliseconds | NS duration: 2 milliseconds | DS-10(19): 266 vs 272 vs 204
+SA(150000,15000,0.999) duration: 1126 milliseconds | GA(500,500,0.7,0.2,0.3) duration: 3725 milliseconds | NS duration: 43 milliseconds | DS-50(69): 965 vs 1194 vs 1028
+SA(150000,15000,0.999) duration: 3445 milliseconds | GA(500,500,0.7,0.2,0.3) duration: 10665 milliseconds | NS duration: 163 milliseconds | DS-100(61): 891 vs 2901 vs 1030

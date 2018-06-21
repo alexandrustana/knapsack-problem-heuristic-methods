@@ -1,0 +1,6 @@
+Define a dataset for the KSP as a 4-tuple of the form DS = {G, N, g[], v[]}, with g[] and v[] being arrays of numbers of size N.
+
+case class DS(G: Int, N: Int, g: List[Int], v: List[Int]) {
+
+  override def toString: String = s"DS-$N($G)"
+}

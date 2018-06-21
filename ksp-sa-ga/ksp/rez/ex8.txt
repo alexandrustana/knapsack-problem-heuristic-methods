@@ -1,0 +1,69 @@
+Implement  simulated  annealing  for  the  KSP  and  run  it  on  all  4  datasets.  Use  3  different  sets  of  values for the initial tempe rature, temperature length and cooling ratio on each dataset . You should  obtain  4  solution  vectors  (S[] SA - 8 ,  S[] SA - 10 ,  S[] SA - 50 and  S[] SA - 100 ),  each  of  them  containing  3  solutions. For example, if initial temperature = 1500, temperature length = 500 and co oling ratio =  0.9  you  should  obtain  S[0] SA - 8 ,  S[0] SA - 10 ,  S[0] SA - 50 and  S[0] SA - 100 respectively.  New  parameter  values (initial temperature = 15000, temperature length = 1500, cooling ratio = 0.99) would lead to  S[1] SA - 8 , S[1] SA - 10 , S[1] SA - 50 and S[1] SA - 100 respectively. From now on, by S[] SA - i we will denote all  3 solutions obtained on dataset DS i using the 3 sets of values that you chose.
+
+implicit class SA(ds: DS) {
+    private val random = ds.randomSolution()
+    private val initial =
+      List.fill(ds.N)(0).zipWithIndex.map {
+        case (_, i) => {
+          if (random.contains(i)) 1 else 0
+        }.toByte
+      }
+
+    @tailrec
+    final def annealing(
+                         temperature:       Double,
+                         lengthTemperature: Double,
+                         coolingRatio:      Double,
+                         current:           List[Byte] = initial,
+                         result:            List[Byte] = initial,
+                         sampleSize:        Int = 50,
+                         sample:            Int = 0
+                       ): Int = {
+      if (temperature <= lengthTemperature) calculate(result, ds.v)
+      else if (sample == sampleSize)
+        annealing(temperature * coolingRatio, lengthTemperature, coolingRatio, current, result)
+      else {
+        val i = Random.nextInt(ds.N)
+        val temp = current.updated(i, {
+          if (current(i) == 0) 1 else 0
+        }.toByte)
+        val variation = calculate(temp, ds.v) - calculate(current, ds.v)
+        if (variation > 0 && calculate(temp, ds.g) < ds.G)
+          annealing(
+            temperature,
+            lengthTemperature,
+            coolingRatio,
+            result  = if (calculate(temp, ds.v) > calculate(result, ds.v)) temp else result,
+            current = temp,
+            sample  = sample + 1
+          )
+        else {
+          val x = Random.nextDouble()
+          annealing(
+            temperature,
+            lengthTemperature,
+            coolingRatio,
+            result  = result,
+            current = if (x < Math.exp(-variation / temperature)) temp else current,
+            sample  = sample + 1
+          )
+        }
+      }
+    }
+
+    private def calculate(s: List[Byte], l: List[Int]): Int =
+      s.zipWithIndex.map { case (e, i) => if (e == 1) l(i) else 0 }.sum
+  }
+
+  SA(1500,500,0.9) duration: 71 milliseconds | DS-8(100): 259
+  SA(1500,500,0.9) duration: 10 milliseconds | DS-10(17): 360
+  SA(1500,500,0.9) duration: 25 milliseconds | DS-50(24): 611
+  SA(1500,500,0.9) duration: 32 milliseconds | DS-100(26): 535
+  SA(15000,1500,0.99) duration: 42 milliseconds | DS-8(100): 263
+  SA(15000,1500,0.99) duration: 27 milliseconds | DS-10(17): 360
+  SA(15000,1500,0.99) duration: 110 milliseconds | DS-50(24): 611
+  SA(15000,1500,0.99) duration: 304 milliseconds | DS-100(26): 535
+  SA(150000,15000,0.999) duration: 222 milliseconds | DS-8(100): 263
+  SA(150000,15000,0.999) duration: 211 milliseconds | DS-10(17): 360
+  SA(150000,15000,0.999) duration: 1039 milliseconds | DS-50(24): 611
+  SA(150000,15000,0.999) duration: 2455 milliseconds | DS-100(26): 535

@@ -1,0 +1,8 @@
+Use a timer to measure the time T B - 8 required to obtain S B - 8 and the time T B - 10 required to obta in  S B - 10 . Compute  T B - 10 /T B - 8 as opposed to 10/8 = 1.25 and find an explanation. Draw the  necessary  conclusion about the feasibility of backtracking on larger datasets.
+
+B duration: 2 milliseconds | DS-8(70): 404
+B duration: 1 milliseconds | DS-10(79): 401
+
+/*Using the backtracking algorithm on small sets offers solutions in a decent amount of time
+   * the problem is if the data sets become larger(e.g. 50, 100). The backtracking algorithm evaluates some
+   * solutions multiples times this causing the call stack to increase and overflow if the data set is large enough.*/

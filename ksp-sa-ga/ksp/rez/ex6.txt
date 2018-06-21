@@ -1,0 +1,16 @@
+Use a timer to measure the time T NS - 8 required to obtain S NS - 8 and the time T NS - 10 required to obtain  S NS - 10 .  Compare  T NS - 10 /T NS - 8 or  alternatively,  T B - 8 /T NS - 8 and  T B - 10 /T NS - 10 .  Draw  the  necessary  conclusion about the feasibility of neighborhood search on larger datasets. Also measure the time  T NS - 50 required to obtain S NS - 50 and the time T NS - 100 required to obtain S NS - 100 .
+
+NS duration: 107 milliseconds | DS-8(21): 365
+NS duration: 50 milliseconds | DS-10(40): 376
+NS duration: 296 milliseconds | DS-100(98): 865
+NS duration: 37 milliseconds | DS-50(44): 905
+B duration: 1 milliseconds | NS duration: 2 milliseconds | DS-8(21): 365 vs 365
+B duration: 0 milliseconds | NS duration: 3 milliseconds | DS-10(40): 376 vs 376
+NS duration: 4 milliseconds | DS-8(21): 365
+NS duration: 3 milliseconds | DS-10(40): 376
+NS duration: 39 milliseconds | DS-50(44): 905
+NS duration: 152 milliseconds | DS-100(98): 865
+
+/*The neighborhood search algorithm although it doesn't find the best solution(because it doesn't look at all the
+   * possible solutions) it still offers optimal solutions despite the size of the data set, unlike the backtracking
+   * algorithm which call stack can overflow with a relative small data set*/

@@ -1,0 +1,7 @@
+Use a timer to measure the times T[] SA - i (3 times for each i = 8, 10, 50 and 100, a total of 12 times) and  the  times  T[] GA - i (3  times  for  each  i  =  8,  10,  50  and  100, a  total  of  12  times) .  Compare  T[] SA - 10 /T[] SA - 8 ,  T[] GA - 10 /T[] GA - 8 , T B - 8 /T[] SA - 8 ,  T B - 10 /T[] SA - 10 ,  T B - 8 /T[] GA - 8 and  T B - 10 /T[] GA - 10 .  Draw  the  necessary  conclusion s about  the  feasibility  of  simulated  annealing  and  genetic  algorithms  on  larger datasets
+
+/*11*/
+  /*The genetic algorithm shows a better precision when computing the results rather than the simulated annealing
+   * algorithm. This better precision is due to the fact that the genetic algorithm generates a population of solutions
+   * and the simulated annealing algorithm has only one solution. On large data sets the genetic algorithm performs
+   * better than the simulated annealing algorithm*/

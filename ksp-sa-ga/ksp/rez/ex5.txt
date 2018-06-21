@@ -1,13 +1,5 @@
-package hm.alg
+Implement neighborhood search for the KSP and run it on all 4 datasets to obtain solutions  S NS - 8 ,  S NS - 10 , S NS - 50 and S NS - 100 respectively. Compare S NS - 8 with  S B - 8 and S NS - 10 with S B - 10
 
-import hm.DS
-
-import scala.annotation.tailrec
-
-/**
-  * @author Alexandru Stana, alexandru.stana@busymachines.com
-  * @since 20/06/2018
-  */
 object neighbourhood {
   implicit class NS(ds: DS) {
 
@@ -44,3 +36,10 @@ object neighbourhood {
       } yield i :: except
   }
 }
+
+DS-8(56): 416 NS
+DS-10(52): 195 NS
+DS-50(67): 544 NS
+DS-100(1): 99 NS
+DS-8(56): 416 B vs 416 NS
+DS-10(52): 222 B vs 195 NS

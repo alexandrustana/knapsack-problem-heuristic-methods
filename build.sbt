@@ -4,13 +4,9 @@ lazy val root = (project in file("."))
   .settings(commonsSettings)
 
 
-val CatsVersion            = "1.1.0"
-val CatsEffect             = "0.10.1"
-val LogbackVersion         = "1.2.3"
 val ScalaCheckVersion      = "1.13.5"
 val ScalaTestVersion       = "3.0.4"
 val ScalaLoggingVersion    = "3.9.0"
-val PureConfigVersion      = "0.9.0"
 val MonixVersion           = "3.0.0-RC1"
 
 def commonsSettings: Seq[Setting[_]] = Seq(
@@ -18,11 +14,7 @@ def commonsSettings: Seq[Setting[_]] = Seq(
   name         := "ksp",
   version      := "0.0.1-SNAPSHOT",
   libraryDependencies ++= Seq(
-    "org.typelevel"              %% "cats-core"            % CatsVersion            withSources (),
-    "org.typelevel"              %% "cats-effect"          % CatsEffect             withSources (),
-    "ch.qos.logback"             % "logback-classic"       % LogbackVersion         withSources (),
     "com.typesafe.scala-logging" %% "scala-logging"        % ScalaLoggingVersion    withSources (),
-    "com.github.pureconfig"      %% "pureconfig"           % PureConfigVersion      withSources (),
     "io.monix"                   %% "monix"                % MonixVersion           withSources (),
     "org.scalacheck"             %% "scalacheck"           % ScalaCheckVersion      % Test withSources (),
     "org.scalatest"              %% "scalatest"            % ScalaTestVersion       % Test withSources ()

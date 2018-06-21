@@ -11,7 +11,6 @@ import hm.DS
 object backtracking {
   implicit class B(ds: DS) {
 
-    /*3*/
     def backtrack: Int = {
 
       if (ds.N == 0 || ds.G == 0) 0
